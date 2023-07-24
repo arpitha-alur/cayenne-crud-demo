@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map xmlns="http://cayenne.apache.org/schema/10/modelMap"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://cayenne.apache.org/schema/10/modelMap https://cayenne.apache.org/schema/10/modelMap.xsd"
+	 project-version="10">
+	<property name="defaultPackage" value="org.example.cayenne.persistent"/>
+	<db-entity name="DEPARTMENT">
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="LOCATION" type="VARCHAR"/>
+		<db-attribute name="NAME" type="VARCHAR"/>
+	</db-entity>
+	<db-entity name="EMPLOYEE">
+		<db-attribute name="DEPT_ID" type="INTEGER"/>
+		<db-attribute name="EMAIL" type="VARCHAR"/>
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="NAME" type="VARCHAR"/>
+	</db-entity>
+	<obj-entity name="Department" className="org.example.cayenne.persistent.Department" dbEntityName="DEPARTMENT">
+		<obj-attribute name="location" type="java.lang.String" db-attribute-path="LOCATION"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="NAME"/>
+	</obj-entity>
+	<obj-entity name="Employee" className="org.example.cayenne.persistent.Employee" dbEntityName="EMPLOYEE">
+		<obj-attribute name="email" type="java.lang.String" db-attribute-path="EMAIL"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="NAME"/>
+	</obj-entity>
+	<db-relationship name="departmentemployee" source="DEPARTMENT" target="EMPLOYEE" toMany="true">
+		<db-attribute-pair source="ID" target="DEPT_ID"/>
+	</db-relationship>
+	<db-relationship name="employees" source="EMPLOYEE" target="DEPARTMENT">
+		<db-attribute-pair source="DEPT_ID" target="ID"/>
+	</db-relationship>
+	<obj-relationship name="departmentemployee" source="Department" target="Employee" deleteRule="Cascade" db-relationship-path="departmentemployee"/>
+	<obj-relationship name="employees" source="Employee" target="Department" deleteRule="Nullify" db-relationship-path="employees"/>
+</data-map>
